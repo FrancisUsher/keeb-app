@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: 14.x
 
     steps:
     - uses: actions/checkout@v2
@@ -36,5 +36,5 @@ jobs:
 
     - name: Copy files to the production website with the AWS CLI
       run: |
-        aws s3 sync -a ./build/. s3://usher.codes
+        aws s3 sync ./build/. s3://usher.codes
     
