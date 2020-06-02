@@ -7,16 +7,14 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
+        <p>Hey this spinning keyboard is pretty hype, right?</p>
         <a
           className="App-link"
-          href="https://reactjs.org"
+          href="https://github.com/FrancisUsher/react-site-demo"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Contribute to this project on GitHub!
         </a>
       </header>
     </div>
