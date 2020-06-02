@@ -36,5 +36,5 @@ jobs:
 
     - name: Copy files to the production website with the AWS CLI
       run: |
-        aws s3 sync ./build/. s3://usher.codes
+        aws s3 sync ./build/. s3://keeb.app
     
