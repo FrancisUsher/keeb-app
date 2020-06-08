@@ -1,5 +1,15 @@
 import * as BABYLON from 'babylonjs';
 
+interface Key {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  rotation_angle: number;
+  rotation_x: number;
+  rotation_y: number;
+}
+
 // Standard MX switch is 1.905 cm from center to center
 const KEY_UNIT = 1.905;
 // and 1.4 cm plate cutout
@@ -35,6 +45,10 @@ function getSwitchCenters() {
       //   new BABYLON.Vector3(x + 0.9, 0, z + 0.9),
     ])
   );
+}
+
+function getSwitchCentersFromKeys(keys: Key[]): BABYLON.Vector3[] {
+  return keys.flatMap((key) => new BABYLON.Vector3(key.x, 0, key.y));
 }
 
 function getSwitchBounds(switchCenters: BABYLON.Vector3[]) {
@@ -153,4 +167,10 @@ function convexHull(points: BABYLON.Vector3[]) {
   // find convex hull on each side
   return [v, ...extend(u, v, left), u, ...extend(v, u, right), v];
 }
-export { getSwitchCenters, getSwitchPlateCutouts, getSwitchBounds, convexHull };
+export {
+  getSwitchCenters,
+  getSwitchCentersFromKeys,
+  getSwitchPlateCutouts,
+  getSwitchBounds,
+  convexHull,
+};
