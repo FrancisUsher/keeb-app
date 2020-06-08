@@ -10,7 +10,7 @@ import 'babylonjs-loaders';
 import SceneComponent from './SceneComponent'; // ^^ point to file we created above or 'babylonjs-hook' NPM.
 import './App.css';
 import {
-  getSwitchCenters,
+  //  getSwitchCenters,
   getSwitchCentersFromKeys,
   getSwitchPlateCutouts,
   getSwitchBounds,
