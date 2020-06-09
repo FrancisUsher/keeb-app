@@ -38,6 +38,11 @@
       "prettier/prettier": "error"
     }
   },
+  "jest" :{
+    "transformIgnorePatterns": [
+      "node_modules/(?!(@babylonjs)/)"
+    ]
+  },
   "prettier": {
     "singleQuote": true
   },
