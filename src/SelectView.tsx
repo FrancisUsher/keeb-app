@@ -1,7 +1,13 @@
 import React from 'react';
 
-function SelectView(props) {
-  const handleViewChange = (e) => props.onViewChange(e.target.value);
+interface Props {
+  view: string;
+  onViewChange: Function;
+}
+
+function SelectView(props: Props) {
+  const handleViewChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
+    props.onViewChange(e.target.value);
   return (
     <label>
       Select View

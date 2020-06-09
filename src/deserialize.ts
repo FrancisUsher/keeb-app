@@ -2,13 +2,13 @@ interface MetaRow {
   rotation_x: number;
 }
 interface Meta {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  r: number;
-  rx: number;
-  ry: number;
+  x?: number;
+  y?: number;
+  w?: number;
+  h?: number;
+  r?: number;
+  rx?: number;
+  ry?: number;
 }
 interface Key {
   x: number;

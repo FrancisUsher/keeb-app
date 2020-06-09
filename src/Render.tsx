@@ -18,9 +18,9 @@ import {
 } from './generate';
 import { deserialize } from './deserialize';
 
-let box;
+let focus: BABYLON.Mesh;
 
-const onSceneReady = (scene) => {
+const onSceneReady = (scene: BABYLON.Scene) => {
   //Adding a light
   var light = new BABYLON.PointLight(
     'Omni',
@@ -38,7 +38,10 @@ const onSceneReady = (scene) => {
     scene
   );
   const canvas = scene.getEngine().getRenderingCanvas();
-  camera.attachControl(canvas, false);
+  if (canvas !== null) {
+    camera.attachControl(canvas, false);
+  }
+
   //Polygon shape in XoZ plane
   // var shape = [
   //   new BABYLON.Vector3(-15, 0, -15),
@@ -47,21 +50,7 @@ const onSceneReady = (scene) => {
   //   new BABYLON.Vector3(-15, 0, 15),
   // ];
   const keys = deserialize([
-    [
-      {
-        a: 7,
-      },
-      'Q',
-      'W',
-      'E',
-      'R',
-      'T',
-      'Y',
-      'U',
-      'I',
-      'O',
-      'P',
-    ],
+    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
     ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';'],
     ['Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/'],
     [
@@ -116,7 +105,7 @@ const onSceneReady = (scene) => {
   //   (meshes) => {
   //     console.log(`${meshes.length} meshes`);
   //     let mesh = meshes[0];
-  box = mesh;
+  focus = mesh;
   camera.setTarget(mesh.getBoundingInfo().boundingBox.centerWorld); // Find center & set target
   camera.radius = 12; // Distance
   camera.beta = 1; // Rotation, up/down
@@ -171,21 +160,16 @@ const onSceneReady = (scene) => {
 /**
  * Will run on every frame render.  We are spinning the box on y-axis.
  */
-const onRender = (scene) => {
-  if (box !== undefined) {
+const onRender = (scene: BABYLON.Scene) => {
+  if (focus !== undefined) {
     var deltaTimeInMillis = scene.getEngine().getDeltaTime();
     const rpm = 10;
-    box.rotation.y += (rpm / 60) * Math.PI * 2 * (deltaTimeInMillis / 1000);
+    focus.rotation.y += (rpm / 60) * Math.PI * 2 * (deltaTimeInMillis / 1000);
   }
 };
 
 export default () => (
   <div>
-    <SceneComponent
-      antialias
-      onSceneReady={onSceneReady}
-      onRender={onRender}
-      id="my-canvas"
-    />
+    <SceneComponent antialias onSceneReady={onSceneReady} onRender={onRender} />
   </div>
 );

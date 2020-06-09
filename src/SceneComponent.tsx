@@ -3,9 +3,9 @@ import React, { useEffect, useRef, useState } from 'react';
 
 interface Props {
   antialias: boolean;
-  engineOptions: BABYLON.EngineOptions;
-  adaptToDeviceRatio: boolean;
-  sceneOptions: BABYLON.SceneOptions;
+  engineOptions?: BABYLON.EngineOptions;
+  adaptToDeviceRatio?: boolean;
+  sceneOptions?: BABYLON.SceneOptions;
   onRender: Function;
   onSceneReady: Function;
 }
