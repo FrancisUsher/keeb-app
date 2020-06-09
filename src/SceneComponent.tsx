@@ -1,7 +1,16 @@
 import { Engine, Scene } from '@babylonjs/core';
 import React, { useEffect, useRef, useState } from 'react';
 
-export default (props) => {
+interface Props {
+  antialias: boolean;
+  engineOptions: BABYLON.EngineOptions;
+  adaptToDeviceRatio: boolean;
+  sceneOptions: BABYLON.SceneOptions;
+  onRender: Function;
+  onSceneReady: Function;
+}
+
+export default (props: Props) => {
   const reactCanvas = useRef(null);
   const {
     antialias,
@@ -14,7 +23,7 @@ export default (props) => {
   } = props;
 
   const [loaded, setLoaded] = useState(false);
-  const [scene, setScene] = useState(null);
+  const [scene, setScene] = useState(null as Scene | null);
 
   useEffect(() => {
     if (window) {
@@ -57,7 +66,9 @@ export default (props) => {
     }
 
     return () => {
-      if (scene !== null) {
+      if (scene === null) {
+        return;
+      } else {
         scene.dispose();
       }
     };
