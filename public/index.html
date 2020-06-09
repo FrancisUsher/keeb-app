@@ -10,6 +10,18 @@
   <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   <title>keeb.app</title>
+  <script>
+    // Purge old buggy service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(
+        function(registrations) {
+          for(let registration of registrations) {
+            registration.unregister();
+          }
+        }
+      );
+    }
+  </script>
 </head>
 
 <body>
