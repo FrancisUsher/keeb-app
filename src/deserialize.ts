@@ -21,7 +21,7 @@ interface Key {
 }
 type KeyItem = string | Meta;
 type KeyRow = KeyItem[];
-type Row = KeyRow | MetaRow;
+export type Row = KeyRow | MetaRow;
 interface Cluster {
   x: number;
   y: number;
@@ -67,22 +67,22 @@ function deserialize(rows: Row[]): Key[] {
     x: key.x + key.width / 2,
     y: key.y + key.height / 2,
   }));
-  console.log(keys);
+  // console.log(keys);
   // Apply rotation
   return offsetCenters;
 }
 
 function resetCurrent(current: Key): void {
-  console.log(`reset ${current.x} += ${current.width}`);
+  // console.log(`reset ${current.x} += ${current.width}`);
   current.x = current.x + current.width;
   current.width = 1;
   current.height = 1;
 }
 
 function updateCurrentByMeta(current: Key, meta: Meta, cluster: Cluster): void {
-  console.log(meta);
-  console.log(current);
-  console.log(cluster);
+  // console.log(meta);
+  // console.log(current);
+  // console.log(cluster);
   // Update rotation info
   if (meta.r) {
     current.rotation_angle = meta.r;

@@ -2,8 +2,8 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import App from './App';
 
-test('renders github project link', () => {
+it('asks people to help improve', () => {
   const { getByText } = render(<App />);
-  const linkElement = getByText(/GitHub/i);
+  const linkElement = getByText(/improve keeb.app/i);
   expect(linkElement).toBeInTheDocument();
 });

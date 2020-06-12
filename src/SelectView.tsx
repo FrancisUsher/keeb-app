@@ -14,7 +14,7 @@ function SelectView(props: Props) {
       <select value={props.view} onChange={handleViewChange}>
         <option value="layout-editor">Layout Editor</option>
         <option value="render-view">3-D Render</option>
-        <option value="hacker-mode">Hacker Mode</option>
+        <option value="plate-gen">Plate Generator</option>
       </select>
     </label>
   );

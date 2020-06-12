@@ -1,5 +1,6 @@
 import { Engine, Scene } from '@babylonjs/core';
 import React, { useEffect, useRef, useState } from 'react';
+import { Row } from './deserialize';
 
 interface Props {
   antialias: boolean;
@@ -8,6 +9,7 @@ interface Props {
   sceneOptions?: BABYLON.SceneOptions;
   onRender: Function;
   onSceneReady: Function;
+  rows: Row[];
 }
 
 export default (props: Props) => {
@@ -59,7 +61,7 @@ export default (props: Props) => {
 
       engine.runRenderLoop(() => {
         if (typeof onRender === 'function') {
-          onRender(scene);
+          onRender(scene, props.rows);
         }
         scene.render();
       });
