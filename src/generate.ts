@@ -51,6 +51,10 @@ function getSwitchCentersFromKeys(keys: Key[]): BABYLON.Vector3[] {
   return keys.flatMap((key) => new BABYLON.Vector3(key.x, 0, key.y));
 }
 
+function getCenters(keys: Key[]): number[][] {
+  return keys.map((key) => [key.x, key.y, key.width, key.height]);
+}
+
 function getSwitchBounds(switchCenters: BABYLON.Vector3[]) {
   return switchCenters.map((center) => [
     new BABYLON.Vector3(
@@ -168,6 +172,7 @@ function convexHull(points: BABYLON.Vector3[]) {
   return [v, ...extend(u, v, left), u, ...extend(v, u, right), v];
 }
 export {
+  getCenters,
   getSwitchCenters,
   getSwitchCentersFromKeys,
   getSwitchPlateCutouts,

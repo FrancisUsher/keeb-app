@@ -15,7 +15,7 @@ function CanvasArea(props: Props) {
   } else if (props.view === 'layout-editor') {
     return <LayoutEditor></LayoutEditor>;
   } else if (props.view === 'plate-gen') {
-    return <PlateGen></PlateGen>;
+    return <PlateGen rows={props.rows}></PlateGen>;
   } else {
     return <div> Hacker mode activated! </div>;
   }

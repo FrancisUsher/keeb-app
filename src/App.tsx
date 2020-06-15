@@ -14,7 +14,7 @@ import {
   Container,
   Box,
   Grid,
-  Paper,
+  // Paper,
   // useMediaQuery,
 } from '@material-ui/core';
 import {
@@ -99,12 +99,14 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   drawer: {
+    position: 'absolute',
     width: drawerWidth,
+    height: '100vh',
     flexShrink: 0,
   },
   drawerPaper: {
     position: 'relative',
-    whiteSpace: 'nowrap',
+    // whiteSpace: 'nowrap',
     width: drawerWidth,
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
@@ -125,6 +127,7 @@ const useStyles = makeStyles((theme) => ({
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
+    marginLeft: 240,
     height: '100vh',
     overflow: 'auto',
   },
@@ -281,17 +284,10 @@ function App() {
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
-              {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
-                <SelectView view={view} onViewChange={setView}></SelectView>
-              </Grid>
               {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <CanvasArea view={view} rows={rows}></CanvasArea>
-              </Grid>
-              {/* Recent Orders */}
               <Grid item xs={12}>
-                <Paper className={classes.paper}></Paper>
+                <CanvasArea view={view} rows={rows}></CanvasArea>
+                <SelectView view={view} onViewChange={setView}></SelectView>
               </Grid>
             </Grid>
             <Box pt={4}>
