@@ -1,6 +1,6 @@
 import React from 'react';
 import makerjs, { IModel } from 'makerjs';
-import { mx as mxCutout, mxSpacing } from './cutouts';
+import { mx as mxCutout, bezelConcaveHull } from './cutouts';
 import { deserialize, Row } from './deserialize';
 import { getCenters } from './generate';
 
@@ -16,37 +16,17 @@ function PlateGen(props: Props) {
     const cutoutModels = centers.map(([x, y]) =>
       mxCutout(x * 19.05, y * 19.05)
     );
-    const spacingModels = centers.map(([x, y, width, height]) =>
-      mxSpacing(x * 19.05, y * 19.05, width, height)
-    );
     const cutoutsModel = {
       models: { ...cutoutModels },
       origin: [0, 0],
     } as IModel;
 
-    const spacingsModel = {
-      models: { ...spacingModels },
-      origin: [0, 0],
-    } as IModel;
     const flippedCutouts = makerjs.model.mirror(cutoutsModel, false, true);
-    const flippedSpacing = makerjs.model.mirror(spacingsModel, false, true);
-    if (
-      flippedCutouts.models !== undefined &&
-      flippedSpacing.models !== undefined
-    ) {
-      let plateBounds = {};
-      for (const k in flippedCutouts.models) {
-        // if (k.includes('1')) {
-        plateBounds = makerjs.model.combineUnion(
-          plateBounds,
-          makerjs.model.outline(flippedSpacing.models[k], 6)
-        );
-        // }
-      }
+    if (flippedCutouts.models !== undefined) {
       const plateModel = {
         models: {
           switches: flippedCutouts,
-          outline: plateBounds,
+          outline: makerjs.model.outline(bezelConcaveHull(centers, 3), 6),
         },
       };
       // const drawing = mxCutout(5, 5);

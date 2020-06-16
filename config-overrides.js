@@ -1,4 +1,9 @@
 /* config-overrides.js */
-const { useBabelRc, override } = require('customize-cra');
+const { useBabelRc, addWebpackAlias, override } = require('customize-cra');
 
-module.exports = override(useBabelRc());
+module.exports = override(
+  useBabelRc(),
+  addWebpackAlias({
+    tinyqueue$: require.resolve('tinyqueue/tinyqueue.js'),
+  })
+);
