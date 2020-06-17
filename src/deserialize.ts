@@ -1,7 +1,7 @@
-interface MetaRow {
+interface KLEMetaRow {
   rotation_x: number;
 }
-interface Meta {
+interface KLEMeta {
   x?: number;
   y?: number;
   w?: number;
@@ -10,7 +10,7 @@ interface Meta {
   rx?: number;
   ry?: number;
 }
-interface Key {
+interface KLEKey {
   x: number;
   y: number;
   width: number;
@@ -19,17 +19,66 @@ interface Key {
   rotation_x: number;
   rotation_y: number;
 }
-type KeyItem = string | Meta;
-type KeyRow = KeyItem[];
-export type Row = KeyRow | MetaRow;
-interface Cluster {
+type KLEKeyItem = string | KLEMeta;
+type KLEKeyRow = KLEKeyItem[];
+export type KLERow = KLEKeyRow | KLEMetaRow;
+interface KLECluster {
   x: number;
   y: number;
 }
 
-function deserialize(rows: Row[]): Key[] {
+export interface Key {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  angleInDegrees: number;
+}
+function rotate(
+  cx: number,
+  cy: number,
+  x: number,
+  y: number,
+  angleInDegrees: number
+) {
+  const radians = (Math.PI / 180) * angleInDegrees;
+  const cos = Math.cos(radians);
+  const sin = Math.sin(radians);
+  const nx = cos * (x - cx) + sin * (y - cy) + cx;
+  const ny = cos * (y - cy) - sin * (x - cx) + cy;
+  return { x: nx, y: ny };
+}
+function interpretKey(kleKey: KLEKey): Key {
+  //
+  // First apply key width and height to find switch center
+  const offsetKeyCenter = {
+    x: kleKey.x + kleKey.width / 2,
+    y: kleKey.y + kleKey.height / 2,
+  };
+  // Then compute rotation on the new center
+  const rotationCenter = { x: kleKey.rotation_x, y: kleKey.rotation_y };
+  const rotatedCenter = rotate(
+    rotationCenter.x,
+    -rotationCenter.y,
+    offsetKeyCenter.x,
+    -offsetKeyCenter.y,
+    kleKey.rotation_angle
+  );
+  const key = {
+    x: rotatedCenter.x,
+    y: rotatedCenter.y,
+    width: kleKey.width,
+    height: kleKey.height,
+    angleInDegrees: kleKey.rotation_angle,
+  };
+  // console.log(key);
+
+  return key;
+}
+
+function deserialize(rows: KLERow[]): Key[] {
   // Initialize with defaults
-  const current: Key = {
+  const current: KLEKey = {
     x: 0,
     y: 0,
     width: 1,
@@ -38,8 +87,8 @@ function deserialize(rows: Row[]): Key[] {
     rotation_x: 0,
     rotation_y: 0,
   };
-  const keys: Key[] = [];
-  const cluster: Cluster = {
+  const keys: KLEKey[] = [];
+  const cluster: KLECluster = {
     x: 0,
     y: 0,
   };
@@ -60,26 +109,21 @@ function deserialize(rows: Row[]): Key[] {
     }
     current.x = current.rotation_x;
   });
-
-  // Apply key width and height to find switch center
-  const offsetCenters = keys.map((key) => ({
-    ...key,
-    x: key.x + key.width / 2,
-    y: key.y + key.height / 2,
-  }));
-  // console.log(keys);
-  // Apply rotation
-  return offsetCenters;
+  return keys.map(interpretKey);
 }
 
-function resetCurrent(current: Key): void {
+function resetCurrent(current: KLEKey): void {
   // console.log(`reset ${current.x} += ${current.width}`);
   current.x = current.x + current.width;
   current.width = 1;
   current.height = 1;
 }
 
-function updateCurrentByMeta(current: Key, meta: Meta, cluster: Cluster): void {
+function updateCurrentByMeta(
+  current: KLEKey,
+  meta: KLEMeta,
+  cluster: KLECluster
+): void {
   // console.log(meta);
   // console.log(current);
   // console.log(cluster);

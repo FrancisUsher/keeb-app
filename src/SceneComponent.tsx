@@ -1,6 +1,6 @@
 import { Engine, Scene } from '@babylonjs/core';
 import React, { useEffect, useRef, useState } from 'react';
-import { Row } from './deserialize';
+import { KLERow } from './deserialize';
 
 interface Props {
   antialias: boolean;
@@ -9,7 +9,7 @@ interface Props {
   sceneOptions?: BABYLON.SceneOptions;
   onRender: Function;
   onSceneReady: Function;
-  rows: Row[];
+  rows: KLERow[];
 }
 
 export default (props: Props) => {

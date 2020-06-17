@@ -1,14 +1,5 @@
 import * as BABYLON from 'babylonjs';
-
-interface Key {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  rotation_angle: number;
-  rotation_x: number;
-  rotation_y: number;
-}
+import { Key } from './deserialize';
 
 // Standard MX switch is 1.905 cm from center to center
 const KEY_UNIT = 1.905;

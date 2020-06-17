@@ -1,5 +1,6 @@
 import makerjs, { IModel, IPathLine, IPoint } from 'makerjs';
 import concaveman from 'concaveman';
+import { Key } from './deserialize';
 // Todo:
 // Add kerf tolerance
 // Fillet corners
@@ -35,7 +36,7 @@ interface Hull {
   origin: IPoint;
 }
 
-function mx(x: number, y: number): IModel {
+function mx(key: Key): IModel {
   // switch is x- and y-axis symmetric so make positive quadrant and mirror
   const pxPy = {
     paths: {
@@ -70,19 +71,15 @@ function mx(x: number, y: number): IModel {
       nxNy: makerjs.model.mirror(pxPy, true, true),
       nxPy: makerjs.model.mirror(pxPy, true, false),
     },
-    origin: [x, y],
+    origin: [key.x * MX_SPACING, key.y * MX_SPACING],
   };
-  return model;
+  return makerjs.model.rotate(model, -key.angleInDegrees, model.origin);
 }
 
-function mxSpacing(
-  x: number,
-  y: number,
-  width: number,
-  height: number
-): SwitchBoundingBox {
-  const key_xradius = MX_RADIUS * width;
-  const key_yradius = MX_RADIUS * height;
+function mxSpacing(key: Key): SwitchBoundingBox {
+  // console.log(key);
+  const key_xradius = MX_RADIUS * key.width;
+  const key_yradius = MX_RADIUS * key.height;
   // switch is x- and y-axis symmetric so make positive quadrant and mirror
   const pxPy: QuarterBoundingBox = {
     paths: {
@@ -91,22 +88,29 @@ function mxSpacing(
     },
     origin: [0, 0],
   };
-  const model: SwitchBoundingBox = {
+  const model = {
     models: {
       pxPy,
       pxNy: makerjs.model.mirror(pxPy, false, true) as QuarterBoundingBox,
       nxNy: makerjs.model.mirror(pxPy, true, true) as QuarterBoundingBox,
       nxPy: makerjs.model.mirror(pxPy, true, false) as QuarterBoundingBox,
     },
-    origin: [x, y],
+    origin: [key.x * MX_SPACING, key.y * MX_SPACING],
   };
-  return model;
+  const rotatedModel = makerjs.model.rotate(
+    model,
+    -key.angleInDegrees,
+    model.origin
+  );
+  // console.log(rotatedModel);
+  // return model;
+  return rotatedModel as SwitchBoundingBox;
 }
 
-function bezelConcaveHull(centers: number[][], concavity: number): Hull {
-  const switchBoundingBoxes = centers.map(([x, y, width, height]) =>
+function bezelConcaveHull(keys: Key[], concavity: number): Hull {
+  const switchBoundingBoxes = keys.map((key) =>
     // Invert Y here because it's coming in upside down.
-    mxSpacing(x * 19.05, -y * 19.05, width, height)
+    mxSpacing({ ...key, y: key.y })
   );
   const boundPoints = switchBoundingBoxes.flatMap((boundingBox) =>
     Object.values(boundingBox.models).flatMap((quarterBox) =>
@@ -118,7 +122,7 @@ function bezelConcaveHull(centers: number[][], concavity: number): Hull {
       ])
     )
   );
-  console.log(boundPoints);
+  // console.log(boundPoints);
   const hullPoints = concaveman(boundPoints, concavity);
   const hlen = hullPoints.length;
 

@@ -35,7 +35,7 @@ import './App.css';
 
 import CanvasArea from './CanvasArea';
 import SelectView from './SelectView';
-import { Row } from './deserialize';
+import { KLERow } from './deserialize';
 import { useDropzone } from 'react-dropzone';
 
 function Copyright() {
@@ -166,7 +166,7 @@ function App() {
   const setLayoutView = () => {
     return setView('layout-editor');
   };
-  const [rows, setRows] = React.useState([] as Row[]);
+  const [rows, setRows] = React.useState([] as KLERow[]);
   const onDrop = React.useCallback((acceptedFiles: Blob[]) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader();

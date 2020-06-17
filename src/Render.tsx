@@ -17,10 +17,10 @@ import {
   getSwitchBounds,
   convexHull,
 } from './generate';
-import { deserialize, Row } from './deserialize';
+import { deserialize, KLERow } from './deserialize';
 
 interface Props {
-  rows: Row[];
+  rows: KLERow[];
 }
 
 export default (props: Props) => {
@@ -149,7 +149,7 @@ export default (props: Props) => {
   /**
    * Will run on every frame render.  We are spinning the box on y-axis.
    */
-  const onRender = (scene: BABYLON.Scene, rows: Row[]) => {
+  const onRender = (scene: BABYLON.Scene, rows: KLERow[]) => {
     if (rows.length > 0) {
       const keys = deserialize(rows);
       const centers = getSwitchCentersFromKeys(keys);

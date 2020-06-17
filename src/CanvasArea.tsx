@@ -2,11 +2,11 @@ import React from 'react';
 import Render from './Render';
 import LayoutEditor from './LayoutEditor';
 import PlateGen from './PlateGen';
-import { Row } from './deserialize';
+import { KLERow } from './deserialize';
 
 interface Props {
   view: String;
-  rows: Row[];
+  rows: KLERow[];
 }
 
 function CanvasArea(props: Props) {
