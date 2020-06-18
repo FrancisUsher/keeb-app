@@ -107,23 +107,49 @@ function mxSpacing(key: Key): SwitchBoundingBox {
   return rotatedModel as SwitchBoundingBox;
 }
 
-function bezelConcaveHull(keys: Key[], concavity: number): Hull {
+function boundingBoxPoints(box: SwitchBoundingBox): number[][] {
+  const chain = makerjs.model.findSingleChain(box);
+  const minSpacing = 19.05 / 4;
+  const divisions = Math.floor(chain.pathLength / minSpacing);
+  const spacing = chain.pathLength / divisions;
+
+  const keyPoints = makerjs.chain.toPoints(chain, spacing);
+  return keyPoints.map((point) => [point[0], point[1]]);
+  // return Object.values(box.models).flatMap((quarterBox) =>
+  //   Object.values(quarterBox.paths).flatMap((path) => [
+  //     [
+  //       path.origin[0] + quarterBox.origin[0] + box.origin[0],
+  //       path.origin[1] + quarterBox.origin[1] + box.origin[1],
+  //     ],
+  //   ])
+  // );
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function boundingBoxPrimaryPoints(box: SwitchBoundingBox): number[][] {
+  return Object.values(box.models).flatMap((quarterBox) =>
+    Object.values(quarterBox.paths).flatMap((path) => [
+      [
+        path.origin[0] + quarterBox.origin[0] + box.origin[0],
+        path.origin[1] + quarterBox.origin[1] + box.origin[1],
+      ],
+    ])
+  );
+}
+
+function bezelConcaveHull(keys: Key[], convexity: number): Hull {
   const switchBoundingBoxes = keys.map((key) =>
     // Invert Y here because it's coming in upside down.
     mxSpacing({ ...key, y: key.y })
   );
-  const boundPoints = switchBoundingBoxes.flatMap((boundingBox) =>
-    Object.values(boundingBox.models).flatMap((quarterBox) =>
-      Object.values(quarterBox.paths).flatMap((path) => [
-        [
-          path.origin[0] + quarterBox.origin[0] + boundingBox.origin[0],
-          path.origin[1] + quarterBox.origin[1] + boundingBox.origin[1],
-        ],
-      ])
-    )
-  );
+  // TODO: The points on large keys (e.g. 7u space) will be far enough
+  // away from each other that the concave hull will scoop down underneath
+  // for small enough convexity values. We should trace around the key
+  // shape with additional points, e.g. every 1u, to ensure that layouts
+  // which use these keys don't misbehave when trying to make a tight bezel.
+  const boundPoints = switchBoundingBoxes.flatMap(boundingBoxPoints);
   // console.log(boundPoints);
-  const hullPoints = concaveman(boundPoints, concavity);
+  const hullPoints = concaveman(boundPoints, convexity);
   const hlen = hullPoints.length;
 
   // Start with a one-line hull (last point leading to first point)
