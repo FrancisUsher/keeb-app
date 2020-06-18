@@ -38,11 +38,12 @@ function PlateGen(props: Props) {
 
     // const flippedCutouts = makerjs.model.mirror(cutoutsModel, false, true);
     // if (flippedCutouts.models !== undefined) {
+    const hullModel = bezelConcaveHull(keys, convexity);
     const plateModel = {
       models: {
         switches: cutoutsModel,
         // switches: flippedCutouts,
-        outline: makerjs.model.outline(bezelConcaveHull(keys, convexity), 6),
+        outline: hullModel, //makerjs.model.outline( 6),
       },
     };
     // const drawing = mxCutout(5, 5);
@@ -65,7 +66,7 @@ function PlateGen(props: Props) {
             Convexity
           </Typography>
           <Slider
-            step={0.8}
+            step={1}
             marks
             min={1}
             max={20}
