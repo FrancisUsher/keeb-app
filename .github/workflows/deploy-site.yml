@@ -37,5 +37,5 @@ jobs:
     - name: Copy files to the production website with the AWS CLI
       run: |
         aws s3 rm s3://keeb.app --recursive
-        aws s3 sync ./build/. s3://keeb.app
+        aws s3 sync ./dist/. s3://keeb.app
     
