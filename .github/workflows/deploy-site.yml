@@ -38,4 +38,5 @@ jobs:
       run: |
         aws s3 rm s3://keeb.app --recursive
         aws s3 sync ./dist/. s3://keeb.app
+        aws s3 sync ./dist/index.html s3://keeb.app/index.html --cache-control max-age=0
     
