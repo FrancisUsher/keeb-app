@@ -1,23 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { setFitsBoardPerfectly } from "./lib/util";
+import Paw from "./lib/keyboards/Paw";
+import Alpha26 from "./lib/keycapSets/Alpha26";
+import Arrows from "./lib/keycapSets/Arrows";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        {[Alpha26, Arrows].map((keycapSet, index) => (
+          <p key={index}>
+            {`${keycapSet.name} ${
+              setFitsBoardPerfectly(keycapSet, Paw) ? "fits" : "does not fit"
+            } ${Paw.name}`}
+          </p>
+        ))}
       </header>
     </div>
   );
